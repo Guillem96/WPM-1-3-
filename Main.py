@@ -15,7 +15,7 @@ def convert_soft(f,soft):
 def convert_hard(f,hard):
     clause = Clause(f.hard_cost,[])
     clause_list = []
-    literals_left=hard.len()
+    literals_left=len(hard.literals)
     for literal in hard.literals:
 
         if clause.lenght == 2:
@@ -43,5 +43,11 @@ def convert_hard(f,hard):
     return clause_list + [clause]
 
 if __name__ == '__main__':
-    f = Formula('dimacs.txt')
-    print str(f)
+    f = Formula()
+    f.read_file('dimacs.txt')
+    new_formula = Formula(f.num_literals,f.hard_cost,[])
+    for soft_clause in f.soft_clauses:
+        new_formula.add_clauses(convert_soft(new_formula,soft_clause))
+    for hard_clauses in f.hard_clauses:
+        new_formula.add_clauses(convert_hard(new_formula,hard_clauses))
+    print str(new_formula)
