@@ -35,7 +35,7 @@ class Formula:
         if clause.cost == self.hard_cost:
             self.hard_clauses.append(clause)
         else:
-            self.hard_clauses.append(clause)
+            self.soft_clauses.append(clause)
 
 
     def read_file(self, file_path):
