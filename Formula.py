@@ -23,6 +23,18 @@ class Formula:
         return soft_clauses, hard_clauses
 
 
+    def add_clauses(self, clauses):
+        for c in clauses:
+            self.add_clause(c)
+
+
+    def add_clause(self, clause):
+        if clause.cost == self.hard_cost:
+            self.hard_clauses.append(clause)
+        else:
+            self.hard_clauses.append(clause)
+
+
     def read_file(self, file_path):
         for line in open(file_path):
             if "wcnf" in line: # first line
