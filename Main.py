@@ -1,40 +1,42 @@
 from Formula import Formula
+from Clause import Clause
 
 #converts a soft clause into a soft clause with 1 literal and a list of hard clauses of lenght 3
-def convert_soft(soft):
-    new_literal=DimacsC.create_next_literal()
-    new_soft=(soft.cost,new_literal * (-1) )
-    new_hard=(DimacsC.hard_cost,soft.add(new_literal))
-    hardslist = convert_hard(new_hard)
+def convert_soft(f,soft):
+    new_literal=f.create_literal()
+    new_soft=(soft.cost,new_literal * (-1) ) # (!b,soft_cost)
+    soft.add(new_literal)
+    new_hard=(f.hard_cost,soft.literals)
+    hardslist = convert_hard(f,new_hard)
     return [new_soft] + hardslist
 
 
 #converts a hard clause of maximum lenght N into hard clausules of maximum lenght 3
-def convert_hard(hard):
-    clause = Clause(DimacsC.hard_cost,[])
+def convert_hard(f,hard):
+    clause = Clause(f.hard_cost,[])
     clause_list = []
-    literals_left=clause.lenght()
+    literals_left=hard.len()
     for literal in hard.literals:
 
         if clause.lenght == 2:
 
             if literals_left == 1:
-                clause=clause.add(literal)
+                clause.add(literal)
 
             else:
-                current_aux=DimacsC.create_next_literal()
-                clause=clause.add(current_aux)
+                literal_aux=f.create_literal()
+                clause.add(literal_aux)
                 clause_list+=[clause]
-                clause = Clause(DimacsC.hard_cost,[current_aux * (-1)])
-                clause=clause.add(literal)
+                clause = Clause(f.hard_cost,[literal_aux * (-1)])
+                clause.add(literal)
                 literals_left-=1
 
         elif clause.lenght == 1:
-            clause=clause.add(literal)
+            clause.add(literal)
             literals_left-=1
 
         elif clause.lenght == 0:
-            clause=clause.add(literal)
+            clause.add(literal)
             literals_left-=1
 
 
