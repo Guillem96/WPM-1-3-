@@ -10,16 +10,20 @@ class Formula:
         1 1 3 0
     """
 
-    def __init__(self, file_path):
-        self.soft_clauses = []
-        self.hard_clauses = []
-        self.num_literals = 0
-        self.hard_cost = 0
-        self.aux_count = 0
+    def __init__(self, num_literals = 0, hard_cost = 1, clause_list = []):
+        self.soft_clauses, self.hard_clauses = self.__filter_clauses(clause_list)
+        self.num_literals = num_literals
+        self.hard_cost = hard_cost
 
-        self.__read_file(file_path)
 
-    def __read_file(self, file_path):
+    def __filter_clauses(self, clause_list):
+        soft_clauses = filter(lambda c :not (c.cost == self.hard_cost), clause_list)
+        hard_clauses = filter(lambda c : c.cost == self.hard_cost, clause_list)
+
+        return soft_clauses, hard_clauses
+
+
+    def read_file(self, file_path):
         for line in open(file_path):
             if "wcnf" in line: # first line
                 # Get num
@@ -37,14 +41,11 @@ class Formula:
 
 
     def create_literal(self):
-        self.aux_count += 1
-        return self.aux_count
+        self.num_literals += 1
+        return self.num_literals
 
 
     def __str__(self):
-        # calculate num literals
-        num_literals = self.aux_count
-
         # Calculate num_clauses
         num_clauses = len(self.hard_clauses) + len(self.soft_clauses)
 
@@ -60,3 +61,8 @@ class Formula:
         # Format hard claues
         hard_clauses = "\n".join(map(str, self.hard_clauses))
         return f_line + soft_clauses + hard_clauses
+
+if __name__ == '__main__':
+    f = Formula()
+    f.read_file('dimacs.txt')
+    print str(f)

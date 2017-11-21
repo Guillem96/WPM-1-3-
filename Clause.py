@@ -11,9 +11,6 @@ class Clause:
     def add(self, literal):
         self.literals.append(literal)
 
-    def len(self):
-        return len(set(map(abs, self.literals)))
-
     @staticmethod
     def clause_from_dimacs_line(line):
         line_split = line.split()
