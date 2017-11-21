@@ -17,10 +17,11 @@ class Formula:
 
 
     def __filter_clauses(self, clause_list):
-        soft_clauses=[]
-        hard_clauses=[]
-        soft_clauses += filter(lambda c :not (c.cost == self.hard_cost), clause_list)
-        hard_clauses += filter(lambda c : c.cost == self.hard_cost, clause_list)
+        if len(clause_list) == 0:
+            return [], []
+
+        soft_clauses = filter(lambda c :not (c.cost == self.hard_cost), clause_list)
+        hard_clauses = filter(lambda c : c.cost == self.hard_cost, clause_list)
 
         return soft_clauses, hard_clauses
 
@@ -68,8 +69,8 @@ class Formula:
 
         # Format first line of dimacs
         f_line = "p wcnf " + str(self.num_literals) + " " \
-                    + str(num_clauses) + " " \
-                    + str(self.hard_cost) + "\n"
+                            + str(num_clauses) + " " \
+                            + str(self.hard_cost) + "\n"
         # Fomrat soft clauses
         soft_clauses = "\n".join(map(str, self.soft_clauses)) + "\n"
         # Format hard claues
