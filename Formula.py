@@ -17,8 +17,10 @@ class Formula:
 
 
     def __filter_clauses(self, clause_list):
-        soft_clauses = filter(lambda c :not (c.cost == self.hard_cost), clause_list)
-        hard_clauses = filter(lambda c : c.cost == self.hard_cost, clause_list)
+        soft_clauses=[]
+        hard_clauses=[]
+        soft_clauses += filter(lambda c :not (c.cost == self.hard_cost), clause_list)
+        hard_clauses += filter(lambda c : c.cost == self.hard_cost, clause_list)
 
         return soft_clauses, hard_clauses
 
