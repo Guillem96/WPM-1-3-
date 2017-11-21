@@ -9,7 +9,7 @@ class Clause:
         self.literals = literals
 
     def add(self, literal):
-        return Clause(self.cost, self.literals.append(literal))
+        self.literals.append(literal)
 
     def len(self):
         return len(set(map(abs, self.literals)))
