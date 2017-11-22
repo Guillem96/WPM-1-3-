@@ -6,8 +6,8 @@ def convert_soft(f,soft):
     new_literal = f.create_literal()
     new_soft = Clause(soft.cost, [new_literal * (-1)]) # (!b,soft_cost)
     soft.add(new_literal)
-    new_hard = Clause(f.hard_cost,soft.literals)
-    hardslist = convert_hard(f,new_hard)
+    new_hard = Clause(f.hard_cost, soft.literals)
+    hardslist = convert_hard(f, new_hard)
     return [new_soft] + hardslist
 
 
@@ -15,14 +15,14 @@ def convert_soft(f,soft):
 def convert_hard(f,hard):
     clause = Clause(f.hard_cost,[])
     clause_list = []
-    literals_left=len(hard.literals)
-    for literal in hard.literals:
 
+    clause.add(hard.literals[0])
+    literals_left = len(hard.literals) - 1
+
+    for literal in hard.literals[1:]:
         if len(clause.literals) == 2:
-
             if literals_left == 1:
                 clause.add(literal)
-
             else:
                 literal_aux=f.create_literal()
                 clause.add(literal_aux)
@@ -32,10 +32,6 @@ def convert_hard(f,hard):
                 literals_left-=1
 
         elif len(clause.literals) == 1:
-            clause.add(literal)
-            literals_left-=1
-
-        elif len(clause.literals) == 0:
             clause.add(literal)
             literals_left-=1
 
